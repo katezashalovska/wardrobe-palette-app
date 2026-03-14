@@ -1,0 +1,31 @@
+﻿Analyzing battle-app...                                         
+
+warning - Unused import: '../../models/clothing_item.dart' - lib\features\home\home_screen.dart:9:8 - unused_import
+   info - Use 'const' with the constructor to improve performance - lib\features\home\home_screen.dart:152:19 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\home\home_screen.dart:153:19 - prefer_const_literals_to_create_immutables
+   info - The declaration '_toHsl' isn't referenced - lib\features\palette\palette_screen.dart:22:12 - unused_element
+   info - The declaration '_complementary' isn't referenced - lib\features\palette\palette_screen.dart:35:9 - unused_element
+   info - The declaration '_analogous' isn't referenced - lib\features\palette\palette_screen.dart:39:9 - unused_element
+   info - The declaration '_triadic' isn't referenced - lib\features\palette\palette_screen.dart:43:9 - unused_element
+   info - The declaration '_tint' isn't referenced - lib\features\palette\palette_screen.dart:47:9 - unused_element
+   info - The declaration '_getRandomColor' isn't referenced - lib\features\palette\palette_screen.dart:148:9 - unused_element
+   info - Use 'const' with the constructor to improve performance - lib\features\palette\palette_screen.dart:204:11 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\palette\palette_screen.dart:206:20 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\palette\palette_screen.dart:247:13 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\palette\palette_screen.dart:250:22 - prefer_const_constructors
+   info - Unnecessary use of 'toList' in a spread - lib\features\palette\palette_screen.dart:320:73 - unnecessary_to_list_in_spreads
+   info - Use 'const' with the constructor to improve performance - lib\features\wardrobe\category_details_screen.dart:23:13 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\wardrobe\category_details_screen.dart:24:22 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\wardrobe\category_details_screen.dart:26:24 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\wardrobe\category_details_screen.dart:88:21 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\wardrobe\category_details_screen.dart:89:30 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\wardrobe\category_details_screen.dart:91:32 - prefer_const_constructors
+warning - Unused import: 'dart:io' - lib\features\wardrobe\wardrobe_screen.dart:1:8 - unused_import
+   info - Use 'const' with the constructor to improve performance - lib\theme\app_theme.dart:10:20 - prefer_const_constructors
+   info - 'background' is deprecated and shouldn't be used. Use surface instead. This feature was deprecated after v3.18.0-0.1.pre - lib\theme\app_theme.dart:15:9 - deprecated_member_use
+   info - 'onBackground' is deprecated and shouldn't be used. Use onSurface instead. This feature was deprecated after v3.18.0-0.1.pre - lib\theme\app_theme.dart:16:9 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\theme\app_theme.dart:20:9 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\theme\app_theme.dart:21:25 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\theme\app_theme.dart:25:27 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\theme\app_theme.dart:29:22 - prefer_const_constructors
+
