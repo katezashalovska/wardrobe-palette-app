@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/clothing_item.dart';
 import '../../providers/wardrobe_provider.dart';
-import '../../providers/navigation_provider.dart';
 import '../../theme/app_colors.dart';
 import 'category_details_screen.dart';
 
@@ -32,11 +31,6 @@ class WardrobeScreen extends ConsumerWidget {
           final categoryItems = items.where((i) => i.category == cat).toList();
           return _buildCategoryCard(context, cat, categoryItems.length, colors[cat] ?? Colors.grey);
         }).toList(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => ref.read(navigationProvider.notifier).state = 2,
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

@@ -19,7 +19,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI Wardrobe'),
+        title: const Text('Wardrobe Palette'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
@@ -149,7 +149,7 @@ class HomeScreen extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [AppColors.primary, AppColors.accentPurple],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,

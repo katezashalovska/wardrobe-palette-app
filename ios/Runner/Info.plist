@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Battle App</string>
+	<string>Wardrobe Palette</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to the camera to allow you to scan your clothing items directly into your wardrobe.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library so you can pick clothing images to add to your wardrobe.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need microphone access for recording videos for clothing scanning, if applicable.</string>
 </dict>
 </plist>

@@ -9,7 +9,7 @@ class BattleApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      title: 'AI Wardrobe Organizer',
+      title: 'Wardrobe Palette',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
       home: const MainNavigationScreen(),
