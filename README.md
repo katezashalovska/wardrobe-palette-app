@@ -1,6 +1,6 @@
-# battle_app
+# Wardrobe Palette
 
-A new Flutter project.
+A Flutter application for managing your wardrobe colors.
 
 ## Getting Started
 
