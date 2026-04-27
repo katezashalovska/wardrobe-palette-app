@@ -13,7 +13,7 @@ class CategoryColorService {
 
     // 1. Get colors for filled categories
     for (var category in ClothingCategory.values) {
-      final items = wardrobe.where((i) => i.category == category).toList();
+      final items = wardrobe.where((i) => i.category == category && i.dominantColors.isNotEmpty).toList();
       if (items.isNotEmpty) {
         // Use the dominant color of the most recent item
         final color = items.last.dominantColors.first;

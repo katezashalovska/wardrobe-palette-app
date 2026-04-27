@@ -1,0 +1,37 @@
+﻿
+Running Gradle task 'assembleRelease'...                        
+flutter : Note: Some input files use or override a deprecated API.
+строка:1 знак:1
++ flutter build apk > build_apk_log.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Note: Some inpu...deprecated API.:String) [], 
+    RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Note: Recompile with -Xlint:deprecation for details.
+lib/features/auth/login_screen.dart:135:23: Error: Required named parameter 'padding' must 
+be provided.
+        child: Padding(
+                      ^
+/C:/src/flutter/packages/flutter/lib/src/widgets/basic.dart:1938:9: Context: Found this can
+didate, but the arguments don't match.
+  const Padding({
+        ^^^^^^^
+Target kernel_snapshot_program failed: Exception
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileFlutterBuildRelease'.
+> Process 'command 'C:\src\flutter\bin\flutter.bat'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1m 11s
+Running Gradle task 'assembleRelease'...                           72,3s
+Gradle task assembleRelease failed with exit code 1

@@ -7,6 +7,7 @@ import 'home/home_screen.dart';
 import 'wardrobe/wardrobe_screen.dart';
 import 'scanner/scanner_screen.dart';
 import 'palette/palette_screen.dart';
+import 'profile/profile_screen.dart';
 
 class MainNavigationScreen extends ConsumerWidget {
   const MainNavigationScreen({super.key});
@@ -16,6 +17,7 @@ class MainNavigationScreen extends ConsumerWidget {
     WardrobeScreen(),
     ScannerScreen(),
     PaletteScreen(),
+    ProfileScreen(),
   ];
 
   @override
@@ -126,6 +128,22 @@ class MainNavigationScreen extends ConsumerWidget {
                   child: const Icon(Icons.palette, color: AppColors.primary),
                 ),
                 label: 'Palette',
+              ),
+              BottomNavigationBarItem(
+                icon: const Padding(
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  child: Icon(Icons.person_outline_rounded),
+                ),
+                activeIcon: Container(
+                  margin: const EdgeInsets.only(bottom: 4.0),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.person_rounded, color: AppColors.primary),
+                ),
+                label: 'Profile',
               ),
             ],
           ),

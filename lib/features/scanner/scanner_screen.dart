@@ -1,119 +1,138 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../models/clothing_item.dart';
-import '../../providers/wardrobe_provider.dart';
+import 'package:image_cropper/image_cropper.dart';
+import '../../providers/subscription_provider.dart';
 import '../../services/ai_service.dart';
+import '../../services/segmentation_service.dart';
 import '../../theme/app_colors.dart';
-
+import 'color_picker_screen.dart';
 class ScannerScreen extends ConsumerWidget {
   const ScannerScreen({super.key});
 
-  Future<ClothingCategory?> _showCategoryPicker(BuildContext context) async {
-    return showDialog<ClothingCategory>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Select Category'),
-        backgroundColor: AppColors.surface,
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: ClothingCategory.values.map((cat) {
-            return ListTile(
-              title: Text(cat.name.toUpperCase()),
-              onTap: () => Navigator.of(context).pop(cat),
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
+
 
   Future<void> _handleScan(BuildContext context, WidgetRef ref) async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.camera);
 
     if (image != null && context.mounted) {
-      final category = await _showCategoryPicker(context);
-      if (category == null) return;
-
-      if (!context.mounted) return;
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(child: CircularProgressIndicator()),
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: image.path,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop to Clothing',
+            toolbarColor: AppColors.primary,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
+          IOSUiSettings(
+            title: 'Crop to Clothing',
+          ),
+        ],
       );
 
-      try {
-        final colors = await AiService.extractDominantColors(image.path);
-        
-        final newItem = ClothingItem(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          imageUrl: image.path,
-          category: category,
-          dominantColors: colors,
-          dateAdded: DateTime.now(),
+      if (croppedFile != null && context.mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(child: CircularProgressIndicator()),
         );
 
-        ref.read(wardrobeProvider.notifier).addItem(newItem);
-        
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Item added to wardrobe!')),
-          );
+        try {
+          final segmented = await SegmentationService.removeBackground(croppedFile.path);
+          final finalPath = segmented ?? croppedFile.path;
+
+          final colors = await AiService.extractDominantColors(finalPath);
+          
+          if (context.mounted) {
+            Navigator.of(context).pop(); // Dismiss progress dialog
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ColorPickerScreen(
+                  imagePath: croppedFile.path, // Original cropped photo with background
+                  segmentedPath: finalPath,    // For color picking logic only
+                  allColors: colors,
+                ),
+              ),
+            );
+          }
+        } catch (e) {
+          if (context.mounted) {
+            Navigator.of(context).pop(); // Dismiss progress dialog
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error analyzing image: $e')),
+            );
+          }
         }
-      } catch (e) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error analyzing image: $e')),
-          );
-        }
-      } finally {
-        if (context.mounted) Navigator.of(context).pop();
       }
     }
   }
 
   Future<void> _handleUpload(BuildContext context, WidgetRef ref) async {
+    // Temporarily disabled for testing
+    /*
+    final subState = ref.read(subscriptionProvider);
+    if (!subState.isPremium) {
+      ref.read(subscriptionProvider.notifier).presentPaywall();
+      return;
+    }
+    */
+
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null && context.mounted) {
-      final category = await _showCategoryPicker(context);
-      if (category == null) return;
-
-      if (!context.mounted) return;
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(child: CircularProgressIndicator()),
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: image.path,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'Crop to Clothing',
+            toolbarColor: AppColors.primary,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+          ),
+          IOSUiSettings(
+            title: 'Crop to Clothing',
+          ),
+        ],
       );
 
-      try {
-        final colors = await AiService.extractDominantColors(image.path);
-
-        final newItem = ClothingItem(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          imageUrl: image.path,
-          category: category,
-          dominantColors: colors,
-          dateAdded: DateTime.now(),
+      if (croppedFile != null && context.mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(child: CircularProgressIndicator()),
         );
 
-        ref.read(wardrobeProvider.notifier).addItem(newItem);
-        
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Item uploaded!')),
-          );
+        try {
+          final segmented = await SegmentationService.removeBackground(croppedFile.path);
+          final finalPath = segmented ?? croppedFile.path;
+
+          final colors = await AiService.extractDominantColors(finalPath);
+
+          if (context.mounted) {
+            Navigator.of(context).pop(); // Dismiss progress dialog
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ColorPickerScreen(
+                  imagePath: croppedFile.path, // Original cropped photo with background
+                  segmentedPath: finalPath,    // For color picking logic only
+                  allColors: colors,
+                ),
+              ),
+            );
+          }
+        } catch (e) {
+          if (context.mounted) {
+            Navigator.of(context).pop(); // Dismiss progress dialog
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error analyzing image: $e')),
+            );
+          }
         }
-      } catch (e) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error analyzing image: $e')),
-          );
-        }
-      } finally {
-        if (context.mounted) Navigator.of(context).pop();
       }
     }
   }

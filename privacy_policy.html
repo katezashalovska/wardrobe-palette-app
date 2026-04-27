@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Wardrobe Palette</title>
+    <meta name="description" content="Privacy Policy for Wardrobe Palette app. Learn how we collect, use, and protect your personal data.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --bg-color: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --heading-color: #1a1a1a;
+            --border-radius: 24px;
+            --max-width: 900px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            background: radial-gradient(circle at top right, #eef2f7, #f4f7f9);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 80px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 80px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Accent glow */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary-color), #00c6ff);
+        }
+
+        header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--heading-color);
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .last-updated {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+            background: #f0f4f8;
+            padding: 6px 16px;
+            border-radius: 100px;
+            display: inline-block;
+        }
+
+        section {
+            margin-bottom: 60px;
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            margin-bottom: 24px;
+            padding-left: 20px;
+            border-left: 5px solid var(--primary-color);
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin: 32px 0 16px 0;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--heading-color);
+            margin: 24px 0 12px 0;
+        }
+
+        p {
+            margin-bottom: 18px;
+            color: var(--text-main);
+            font-size: 1.05rem;
+        }
+
+        ul {
+            margin-bottom: 24px;
+            padding-left: 24px;
+            list-style: none;
+        }
+
+        li {
+            margin-bottom: 14px;
+            position: relative;
+            padding-left: 28px;
+        }
+
+        li::before {
+            content: '•';
+            color: var(--primary-color);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        strong {
+            color: var(--heading-color);
+            font-weight: 700;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 2px solid rgba(0, 123, 255, 0.1);
+            transition: all 0.2s;
+        }
+
+        a:hover {
+            border-bottom: 2px solid var(--primary-color);
+            color: #0056b3;
+        }
+
+        .contact-box {
+            background-color: #f8faff;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #eef2f7;
+            margin-top: 80px;
+        }
+
+        .contact-box h2 {
+            border-left-color: #10b981; /* Green accent for contact */
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 15px;
+            }
+            .container {
+                padding: 40px 25px;
+            }
+            h1 {
+                font-size: 2.25rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section:nth-child(1) { animation-delay: 0.1s; }
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.3s; }
+        section:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Privacy Policy</h1>
+            <span class="last-updated">Last updated: April 10, 2026</span>
+        </header>
+
+        <section>
+            <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
+            <p>We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy.</p>
+        </section>
+
+        <section id="interpretation">
+            <h2>Interpretation and Definitions</h2>
+            <h3>Interpretation</h3>
+            <p>The words of which the initial letter is capitalized have meanings defined under the following conditions. The following definitions shall have the same meaning regardless of whether they appear in singular or in plural.</p>
+            
+            <h3>Definitions</h3>
+            <p>For the purposes of this Privacy Policy:</p>
+            <ul>
+                <li><strong>Account</strong> means a unique account created for You to access our Service or parts of our Service.</li>
+                <li><strong>Application</strong> means the software program provided by the Company downloaded by You on any electronic device, named Wardrobe Palette.</li>
+                <li><strong>Company</strong> (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to AcidSoft, Ukraine, Kharkiv.</li>
+                <li><strong>Country</strong> refers to: Ukraine</li>
+                <li><strong>Device</strong> means any device that can access the Service such as a computer, a cellphone or a digital tablet.</li>
+                <li><strong>Personal Data</strong> is any information that relates to an identified or identifiable individual.</li>
+                <li><strong>Service</strong> refers to the Application.</li>
+                <li><strong>Service Provider</strong> means any natural or legal person who processes the data on behalf of the Company.</li>
+                <li><strong>Usage Data</strong> refers to data collected automatically, either generated by the use of the Service or from the Service infrastructure itself.</li>
+                <li><strong>You</strong> means the individual accessing or using the Service.</li>
+            </ul>
+        </section>
+
+        <section id="collecting">
+            <h2>Collecting and Using Your Personal Data</h2>
+            <h3>Types of Data Collected</h3>
+            <h4>Personal Data</h4>
+            <p>While using Our Service, We may ask You to provide Us with certain personally identifiable information that can be used to contact or identify You. Personally identifiable information may include, but is not limited to:</p>
+            <ul>
+                <li>Email address</li>
+                <li>First name and last name</li>
+                <li>Usage Data</li>
+            </ul>
+
+            <h4>Usage Data</h4>
+            <p>Usage Data is collected automatically when using the Service.</p>
+            <p>Usage Data may include information such as Your Device's IP address, browser type, the pages of our Service that You visit, the time and date of Your visit, and other diagnostic data.</p>
+
+            <h3>Use of Your Personal Data</h3>
+            <p>The Company may use Personal Data for the following purposes:</p>
+            <ul>
+                <li><strong>To provide and maintain our Service</strong>, including to monitor the usage of our Service.</li>
+                <li><strong>To manage Your Account:</strong> to manage Your registration as a user.</li>
+                <li><strong>To contact You:</strong> To contact You by email regarding updates or informative communications.</li>
+                <li><strong>To manage Your requests:</strong> To attend and manage Your requests to Us.</li>
+            </ul>
+        </section>
+
+        <section id="security">
+            <h2>Security of Your Personal Data</h2>
+            <p>The security of Your Personal Data is important to Us, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure. While We strive to use commercially acceptable means to protect Your Personal Data, We cannot guarantee its absolute security.</p>
+        </section>
+
+        <section id="changes">
+            <h2>Changes to this Privacy Policy</h2>
+            <p>We may update Our Privacy Policy from time to time. We will notify You of any changes by posting the new Privacy Policy on this page.</p>
+        </section>
+
+        <div class="contact-box" id="contact">
+            <h2>Contact Us</h2>
+            <p>If you have any questions about this Privacy Policy, You can contact us:</p>
+            <ul>
+                <li>By email: <a href="mailto:info@acidsoft.io">info@acidsoft.io</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 AcidSoft. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

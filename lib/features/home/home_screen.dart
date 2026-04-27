@@ -4,18 +4,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/wardrobe_provider.dart';
 import '../../providers/navigation_provider.dart';
-import '../../services/outfit_service.dart';
 import '../../theme/app_colors.dart';
 import '../../models/clothing_item.dart';
+import '../../providers/subscription_provider.dart';
+import 'outfit_generation_screen.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  Widget build(BuildContext context) {
     final wardrobeState = ref.watch(wardrobeProvider);
     final wardrobe = wardrobeState.items;
-    final suggestion = OutfitService.suggestOutfit(wardrobe);
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +44,7 @@ class HomeScreen extends ConsumerWidget {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 32),
-            _buildOutfitOfTheDay(context, ref, suggestion),
+            _buildOutfitActionCard(context, ref, wardrobe.isNotEmpty),
             const SizedBox(height: 32),
             _buildScanActionCard(context, ref),
             const SizedBox(height: 32),
@@ -144,7 +149,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildOutfitOfTheDay(BuildContext context, WidgetRef ref, OutfitSuggestion? suggestion) {
+  Widget _buildOutfitActionCard(BuildContext context, WidgetRef ref, bool hasItems) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -159,59 +164,62 @@ class HomeScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Outfit of the Day',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              if (suggestion != null)
-                const Icon(Icons.auto_awesome, color: Colors.white, size: 24),
-            ],
+          const Text(
+            'Outfit Generator',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
-            suggestion?.description ?? 'Add more items to get personalized daily outfit suggestions.',
+            hasItems 
+              ? 'Discover stylish combinations based on your collection.'
+              : 'Add more items to get personalized daily outfit suggestions.',
             style: const TextStyle(
               color: Colors.white70,
               fontSize: 16,
             ),
           ),
-          if (suggestion != null) ...[
-            const SizedBox(height: 24),
-            Row(
-              children: suggestion.items.map((item) {
-                return Container(
-                  width: 60,
-                  height: 60,
-                  margin: const EdgeInsets.only(right: 12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.white24),
-                    image: DecorationImage(
-                      image: (kIsWeb 
-                          ? NetworkImage(item.imageUrl) 
-                          : FileImage(io.File(item.imageUrl))) as ImageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ],
           const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () => ref.read(navigationProvider.notifier).state = suggestion != null ? 1 : 2,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: AppColors.primary,
-            ),
-            child: Text(suggestion != null ? 'View Details' : 'Get Started'),
+          Row(
+            children: [
+              if (hasItems) 
+                ElevatedButton.icon(
+                  onPressed: () {
+                    final subState = ref.read(subscriptionProvider);
+                    if (subState.isPremium) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const OutfitGenerationScreen()),
+                      );
+                    } else {
+                      ref.read(subscriptionProvider.notifier).presentPaywall().then((error) {
+                        if (error != null && mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('RevenueCat Error: $error')),
+                          );
+                        }
+                      });
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppColors.primary,
+                  ),
+                  icon: const Icon(Icons.auto_awesome),
+                  label: const Text('Generate Look'),
+                )
+              else
+                ElevatedButton(
+                  onPressed: () => ref.read(navigationProvider.notifier).state = 2,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppColors.primary,
+                  ),
+                  child: const Text('Get Started'),
+                ),
+            ],
           ),
         ],
       ),

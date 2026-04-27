@@ -1,10 +1,15 @@
+import 'dart:io' as io;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/clothing_item.dart';
+import '../../models/saved_palette.dart';
 import '../../providers/wardrobe_provider.dart';
+import '../../providers/saved_palettes_provider.dart';
 import '../../theme/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'saved_palettes_screen.dart';
 import 'dart:math';
 
 class PaletteScreen extends ConsumerStatefulWidget {
@@ -16,6 +21,7 @@ class PaletteScreen extends ConsumerStatefulWidget {
 
 class _PaletteScreenState extends ConsumerState<PaletteScreen> {
   bool _isGenerated = false;
+  bool _isSaved = false;
   List<PaletteComponent> _generatedPalette = [];
 
   // ── Color-theory helpers ──────────────────────────────────────────────────
@@ -217,6 +223,7 @@ class _PaletteScreenState extends ConsumerState<PaletteScreen> {
     setState(() {
       _generatedPalette = newPalette;
       _isGenerated = true;
+      _isSaved = false;
     });
   }
 
@@ -233,6 +240,7 @@ class _PaletteScreenState extends ConsumerState<PaletteScreen> {
     setState(() {
       _generatedPalette = fashionPalette;
       _isGenerated = true;
+      _isSaved = false;
     });
   }
 
@@ -265,6 +273,34 @@ class _PaletteScreenState extends ConsumerState<PaletteScreen> {
     );
   }
 
+  Future<void> _savePalette() async {
+    if (_isSaved || _generatedPalette.isEmpty) return;
+
+    final entries = _generatedPalette
+        .map((p) => PaletteEntry(name: p.name, color: p.color, isFixed: p.isFixed))
+        .toList();
+
+    final id = await ref.read(savedPalettesProvider.notifier).savePalette(entries);
+
+    if (!mounted) return;
+    if (id != null) {
+      setState(() => _isSaved = true);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Palette saved! ✨'),
+          backgroundColor: AppColors.primary,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please sign in to save palettes.')),
+      );
+    }
+  }
+
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
@@ -294,6 +330,23 @@ class _PaletteScreenState extends ConsumerState<PaletteScreen> {
                   color: AppColors.textHeading,
                 ),
               ),
+              const Spacer(),
+              if (_isGenerated)
+                IconButton(
+                  icon: Icon(
+                    _isSaved ? Icons.favorite : Icons.favorite_border,
+                    color: _isSaved ? Colors.pinkAccent : AppColors.primary,
+                  ),
+                  onPressed: _isSaved ? null : _savePalette,
+                  tooltip: _isSaved ? 'Saved' : 'Save Palette',
+                ),
+              IconButton(
+                icon: const Icon(Icons.collections_bookmark_outlined, color: AppColors.primary),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const SavedPalettesScreen()),
+                ),
+                tooltip: 'My Saved Palettes',
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -315,53 +368,53 @@ class _PaletteScreenState extends ConsumerState<PaletteScreen> {
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: 80,
-                  height: 80,
+                  width: 100,
+                  height: 100,
                   decoration: BoxDecoration(
                     color: AppColors.primary.withOpacity(0.08),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
                     Icons.palette,
-                    size: 40,
-                    color: AppColors.accentPurple,
+                    size: 50,
+                    color: AppColors.primary,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 32),
                 const Text(
-                  'Generate Your Palette',
+                  'Palette Generator',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
                     color: AppColors.textHeading,
                   ),
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Create color palettes from your wardrobe items',
+                  'Create color palettes from your wardrobe items using fashion-forward color theory.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     color: AppColors.textBody,
                     height: 1.5,
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 48),
                 Container(
                   decoration: BoxDecoration(
                     gradient: AppColors.primaryGradient,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.primary.withOpacity(0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
+                        blurRadius: 15,
+                        offset: const Offset(0, 6),
                       ),
                     ],
                   ),
@@ -371,38 +424,34 @@ class _PaletteScreenState extends ConsumerState<PaletteScreen> {
                     label: const Text(
                       'Generate Palette',
                       style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
                         color: Colors.white,
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 56),
+                      minimumSize: const Size(double.infinity, 64),
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
                 TextButton.icon(
                   onPressed: _useFashionPalette,
-                  icon: const Icon(Icons.style_outlined, color: AppColors.accentPurple),
+                  icon: const Icon(Icons.auto_awesome, color: AppColors.accentPurple),
                   label: const Text(
                     'Use Fashion Palette (Soft Luxury)',
                     style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
                       color: AppColors.accentPurple,
                     ),
                   ),
-                  style: TextButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 44),
-                  ),
                 ),
-                const SizedBox(height: 100), // Reserve space for bottom navigation
               ],
             ),
           ),
@@ -412,28 +461,59 @@ class _PaletteScreenState extends ConsumerState<PaletteScreen> {
   }
 
   Widget _buildResultView() {
-    return Column(
+    return Stack(
       children: [
-        _buildPaletteHeader(),
-        Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            physics: const BouncingScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 0.9, 
+        Column(
+          children: [
+            _buildPaletteHeader(),
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 180), // Ample bottom padding for floating button
+                physics: const BouncingScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.82, // Improved ratio to fill screen better
+                ),
+                itemCount: _generatedPalette.length,
+                itemBuilder: (context, index) {
+                  return _buildPantoneSwatch(_generatedPalette[index]);
+                },
+              ),
             ),
-            itemCount: _generatedPalette.length,
-            itemBuilder: (context, index) {
-              return _buildPantoneSwatch(_generatedPalette[index]);
-            },
+          ],
+        ),
+        // Gradient overlay at bottom
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 140,
+          child: IgnorePointer(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.background.withOpacity(0),
+                    AppColors.background.withOpacity(0.8),
+                    AppColors.background,
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(24, 10, 24, 110), // Padding to stay above bottom nav
-          child: _buildFloatingGenerateButton(),
+        // Truly floating centered button
+        Positioned(
+          bottom: 72, // Slightly lower, above the bottom navigation bar
+          left: 0,
+          right: 0,
+          child: Center(
+            child: _buildFloatingGenerateButton(),
+          ),
         ),
       ],
     );
@@ -482,29 +562,30 @@ class _PaletteScreenState extends ConsumerState<PaletteScreen> {
     final String hexCode = comp.color.value.toRadixString(16).substring(2).toUpperCase();
     
     return GestureDetector(
-      onTap: comp.isFixed ? null : () => _generateIndividualBar(comp),
+      onTap: () => _showItemsForColor(comp),
+      onLongPress: comp.isFixed ? null : () => _generateIndividualBar(comp),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.circular(12), // Smoother, more modern rounded corners
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 15,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Color Block (Flexible)
+            // Color Block
             Expanded(
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: comp.color,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(2)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                 ),
                 child: comp.isFixed 
                   ? const Align(
@@ -643,19 +724,126 @@ class _PaletteScreenState extends ConsumerState<PaletteScreen> {
     });
   }
 
+  void _showItemsForColor(PaletteComponent comp) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.background,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        final wardrobeState = ref.read(wardrobeProvider);
+        final wardrobe = wardrobeState.items;
+        
+        final Map<String, List<ClothingCategory>> slotToCategories = {
+          'Outerwear': [ClothingCategory.outerwear],
+          'Top': [ClothingCategory.tops, ClothingCategory.dresses, ClothingCategory.sets],
+          'Bottom': [ClothingCategory.bottoms],
+          'Accessories': [ClothingCategory.accessories, ClothingCategory.shoes, ClothingCategory.bags],
+          'Cosmetics': [ClothingCategory.cosmetics],
+          'Manicure': [ClothingCategory.cosmetics],
+        };
+        final categories = slotToCategories[comp.name] ?? [];
+        
+        final matchingItems = wardrobe.where((item) {
+          if (!categories.contains(item.category)) return false;
+          // Look for an exact match or extremely close match.
+          return item.dominantColors.contains(comp.color) || item.mainColor == comp.color;
+        }).toList();
+
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: comp.color,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.black12),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Items for ${comp.name}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textHeading,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                if (matchingItems.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 32.0),
+                    child: Center(
+                      child: Text(
+                        'No matching items found in your wardrobe.',
+                        style: TextStyle(color: AppColors.textBody),
+                      ),
+                    ),
+                  )
+                else
+                  SizedBox(
+                    height: 120,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: matchingItems.length,
+                      itemBuilder: (ctx, idx) {
+                        final item = matchingItems[idx];
+                        return Container(
+                          width: 100,
+                          margin: const EdgeInsets.only(right: 12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            image: DecorationImage(
+                              image: (kIsWeb 
+                                  ? NetworkImage(item.imageUrl) 
+                                  : FileImage(io.File(item.imageUrl))) as ImageProvider,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Close'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildFloatingGenerateButton() {
     return GestureDetector(
       onTap: _generatePalette,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 18),
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.85), // Darker, more contrasty for floating button
-          borderRadius: BorderRadius.circular(30),
+          color: AppColors.textHeading, // Using dark theme color for button
+          borderRadius: BorderRadius.circular(32),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 15,
-              offset: const Offset(0, 5),
+              color: AppColors.textHeading.withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
             ),
           ],
         ),

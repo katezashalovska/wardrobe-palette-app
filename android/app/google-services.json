@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "815177297629",
+    "project_id": "wardrobe-pallette",
+    "storage_bucket": "wardrobe-pallette.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815177297629:android:fd4665c6dbfa8a59eb3534",
+        "android_client_info": {
+          "package_name": "com.acidsoft.battle_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsdx-eHS6MesjMir9N2V55ZcKWKp4prcU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815177297629:android:6006e9dfc0b82976eb3534",
+        "android_client_info": {
+          "package_name": "com.acidsoft.wardrobepalette"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsdx-eHS6MesjMir9N2V55ZcKWKp4prcU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

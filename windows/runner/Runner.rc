@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.acidsoft" "\0"
-            VALUE "FileDescription", "battle_app" "\0"
+            VALUE "FileDescription", "wardrobepalette" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "battle_app" "\0"
+            VALUE "InternalName", "wardrobepalette" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.acidsoft. All rights reserved." "\0"
-            VALUE "OriginalFilename", "battle_app.exe" "\0"
-            VALUE "ProductName", "battle_app" "\0"
+            VALUE "OriginalFilename", "wardrobepalette.exe" "\0"
+            VALUE "ProductName", "wardrobepalette" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
